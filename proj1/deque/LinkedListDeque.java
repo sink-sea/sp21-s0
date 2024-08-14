@@ -20,10 +20,10 @@ public class LinkedListDeque<T> implements Iterable<T>, Deque<T> {
         LinkedNode<K> next;
         LinkedNode<K> prev;
 
-        public LinkedNode() {
+        LinkedNode() {
             next = prev = null;
         }
-        public LinkedNode(K item) {
+        LinkedNode(K item) {
             value = item;
             next = prev =  null;
         }
@@ -153,19 +153,21 @@ public class LinkedListDeque<T> implements Iterable<T>, Deque<T> {
     }
 
     public boolean equals(Object o) {
-        if (o instanceof LinkedListDeque) {
-            if (size != ((LinkedListDeque<?>) o).size()) {
+        if (o == this) {
+            return true;
+        }
+        if (o instanceof Deque) {
+            Deque<T> that = (Deque<T>) o;
+            if (this.size() != that.size()) {
                 return false;
             }
             for (int i = 0; i < size; i += 1) {
-                if (get(i) != ((LinkedListDeque<?>) o).get(i)) {
+                if (!this.get(i).equals(that.get(i))) {
                     return false;
                 }
             }
             return true;
-        } else {
-          return false;
         }
+        return false;
     }
-
 }
