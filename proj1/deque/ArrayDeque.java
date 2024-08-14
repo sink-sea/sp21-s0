@@ -42,11 +42,12 @@ public class ArrayDeque<T> implements Iterable<T>, Deque<T> {
     public void addFirst(T item) {
         checkCapacity(true);
         head -= 1;
-        if (head == - capacity) {
+        size += 1;
+        if (head == -capacity) {
             head = 0;
+            tail = size;
         }
         items[(head + capacity) % capacity] = item;
-        size += 1;
     }
 
     @Override
@@ -54,6 +55,7 @@ public class ArrayDeque<T> implements Iterable<T>, Deque<T> {
         checkCapacity(true);
         if (tail == capacity) {
             tail = 0;
+            head = -size;
         }
         items[(tail + capacity) % capacity] = item;
         tail += 1;
