@@ -15,16 +15,24 @@ public class ArrayDeque<T> implements Iterable<T>, Deque<T> {
         items = (T[]) new Object[capacity];
     }
 
-    public void checkCapacity() {
-        if (size + 1 >= capacity) {
-            int newCapacity = capacity * 2;
-            T[] newItems = (T[]) new Object[newCapacity];
-            for (int i = head; i < tail; i += 1) {
-                newItems[(i + newCapacity) % newCapacity] = items[(i + capacity) % capacity];
-            }
-            capacity *= 2;
-            items = newItems;
+    private void checkCapacity(boolean isAdd) {
+        if (isAdd && size + 1 >= capacity) {
+            resize(capacity * 2);
+        } else if ((!isAdd) && size < capacity / 2) {
+            resize(capacity / 2);
         }
+    }
+
+    private void resize(int newCapacity) {
+        T[] newItems = (T[]) new Object[newCapacity];
+        for (int i = head; i < tail; i += 1) {
+            newItems[i - head] = items[(i + 2 * capacity) % capacity];
+        }
+        capacity = newCapacity;
+        items = newItems;
+        head = 0;
+        tail = size;
+        System.out.println("Resize to " + capacity);
     }
 
 //    public boolean isEmpty() {
@@ -33,16 +41,16 @@ public class ArrayDeque<T> implements Iterable<T>, Deque<T> {
 
     @Override
     public void addFirst(T item) {
-        checkCapacity();
+        checkCapacity(true);
         head -= 1;
-        items[(head + capacity) % capacity] = item;
+        items[(head + 2 * capacity) % capacity] = item;
         size += 1;
     }
 
     @Override
     public void addLast(T item) {
-        checkCapacity();
-        items[(tail + capacity) % capacity] = item;
+        checkCapacity(true);
+        items[(tail + 2 * capacity) % capacity] = item;
         tail += 1;
         size += 1;
     }
@@ -53,7 +61,8 @@ public class ArrayDeque<T> implements Iterable<T>, Deque<T> {
             return null;
         }
 
-        T item = items[(head + capacity) % capacity];
+        checkCapacity(false);
+        T item = items[(head + 2 * capacity) % capacity];
         head += 1;
         size -= 1;
 
@@ -66,8 +75,9 @@ public class ArrayDeque<T> implements Iterable<T>, Deque<T> {
             return null;
         }
 
+        checkCapacity(false);
         tail -= 1;
-        T item = items[(tail + capacity) % capacity];
+        T item = items[(tail + 2 * capacity) % capacity];
         size -= 1;
 
         return item;
@@ -83,13 +93,13 @@ public class ArrayDeque<T> implements Iterable<T>, Deque<T> {
         if (index >= size || index < 0) {
             return null;
         }
-        return items[(head + index + capacity) % capacity];
+        return items[(head + index + 2 * capacity) % capacity];
     }
 
     @Override
     public void printDeque() {
         for (int i = head; i < tail; i += 1) {
-            System.out.print(items[(i + capacity) % capacity] + " ");
+            System.out.print(items[(i + 2 * capacity) % capacity] + " ");
         }
         System.out.println();
     }
@@ -106,7 +116,7 @@ public class ArrayDeque<T> implements Iterable<T>, Deque<T> {
         }
 
         public T next() {
-            T val = items[(index + head + capacity) % capacity];
+            T val = items[(index + head + 2 * capacity) % capacity];
             index += 1;
             return val;
         }
@@ -121,12 +131,12 @@ public class ArrayDeque<T> implements Iterable<T>, Deque<T> {
     }
 
     public boolean equals(Object o) {
-        if (o instanceof Deque) {
-            if (size != ((Deque<?>) o).size()) {
+        if (o instanceof ArrayDeque) {
+            if (size != ((ArrayDeque<?>) o).size()) {
                 return false;
             }
             for (int i = 0; i < size; i += 1) {
-                if (get(i) != ((Deque<?>) o).get(i)) {
+                if (get(i) != ((ArrayDeque<?>) o).get(i)) {
                     return false;
                 }
             }
