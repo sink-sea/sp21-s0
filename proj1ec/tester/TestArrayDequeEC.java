@@ -2,12 +2,9 @@ package tester;
 
 import static org.junit.Assert.*;
 
-import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.StdRandom;
 import org.junit.Test;
 import student.StudentArrayDeque;
-
-import java.net.Inet4Address;
 
 public class TestArrayDequeEC {
     @Test
