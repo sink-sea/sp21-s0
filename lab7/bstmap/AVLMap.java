@@ -40,8 +40,8 @@ public class AVLMap<K extends Comparable<K>, V> implements Map61B<K, V>{
         return getHeight(root.left) - getHeight(root.right);
     }
 
-    AVLNode root;
-    int size;
+    private AVLNode root;
+    private int size;
 
     public AVLMap() {
         root = null;
@@ -332,5 +332,14 @@ public class AVLMap<K extends Comparable<K>, V> implements Map61B<K, V>{
     @Override
     public Iterator<K> iterator() {
         return new AVLNodeIter();
+    }
+
+    public void printInOrder() {
+        for (K key : this) {
+            System.out.print("key: ");
+            System.out.print(key);
+            System.out.print(", value: ");
+            System.out.println(get(key));
+        }
     }
 }
